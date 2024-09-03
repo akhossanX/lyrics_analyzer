@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -18,8 +19,8 @@ def add_song(request):
 
     form = SongForm(request.POST)
     if form.is_valid():
-        artist = form.cleaned_data['artist']
-        title = form.cleaned_data['title']
+        artist = form.cleaned_data["artist"]
+        title = form.cleaned_data["title"]
 
         song, created = Song.get_or_create_with_cache(artist, title)
 
@@ -29,18 +30,19 @@ def add_song(request):
             song.countries = ', '.join(extract_countries(song.lyrics))
             song.save()
 
-        return JsonResponse({
-            'id': song.id,
-            'artist': song.artist,
-            'title': song.title,
-            'summary': song.summary,
-            'countries': song.countries
-        })
+        return JsonResponse(
+            {
+                "id": song.id,
+                "artist": song.artist,
+                "title": song.title,
+                "summary": song.summary,
+                "countries": song.countries,
+            }
+        )
     else:
-        # Simple error message, Need to display form.errors later
-        return JsonResponse({'error': 'Invalid form data'}, status=400)
+        return JsonResponse({"error": form.errors}, status=400)
 
 
 @login_required
 def index(request):
-    return render(request, 'songs/index.html')
+    return render(request, "songs/index.html")
