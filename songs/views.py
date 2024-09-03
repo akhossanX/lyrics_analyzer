@@ -25,10 +25,13 @@ def add_song(request):
         song, created = Song.get_or_create_with_cache(artist, title)
 
         if created or not song.lyrics:
-            song.lyrics = fetch_lyrics(artist, title)
-            song.summary = summarize_lyrics(song.lyrics)
-            song.countries = ', '.join(extract_countries(song.lyrics))
-            song.save()
+            try:
+                song.lyrics = fetch_lyrics(artist, title)
+                song.summary = summarize_lyrics(song.lyrics)
+                song.countries = ", ".join(extract_countries(song.lyrics))
+                song.save()
+            except Exception as e:
+                return JsonResponse({"error": [f"{str(e)}"]})
 
         return JsonResponse(
             {
