@@ -3,11 +3,19 @@ from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from .models import Song
 from .forms import SongForm
+from .services import fetch_lyrics, summarize_lyrics, extract_countries
+
+from django.shortcuts import render
+
+from .utils import is_admin_user
 
 
 @login_required
 @require_http_methods(["POST"])
 def add_song(request):
+    if not is_admin_user(request.user):
+        return JsonResponse({"error": f"{request.user.username} is required to be an Admin"})
+
     form = SongForm(request.POST)
     if form.is_valid():
         artist = form.cleaned_data['artist']
