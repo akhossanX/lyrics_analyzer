@@ -22,4 +22,39 @@
     <div id="result" class="bg-gray-100 p-4 rounded-lg hidden"></div>
 </div>
 
+<script>
+    document.getElementById('songForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('{% url "songs:add_song" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h2 class="text-xl font-bold mb-2">${data.artist} - ${data.title}</h2>
+                <p class="mb-2"><strong>Summary:</strong> ${data.summary}</p>
+                <p><strong>Countries mentioned:</strong> ${data.countries}</p>
+            `;
+            resultDiv.classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+            resultDiv.classList.remove('hidden');
+        });
+    });
+</script>
 {% endblock %}
