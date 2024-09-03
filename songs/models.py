@@ -16,7 +16,7 @@ class Song(models.Model):
 
     @classmethod
     def get_or_create_with_cache(cls, artist, title):
-        cache_key = f"song:{artist}:{title}"
+        cache_key = f"song:{hash(artist)}:{hash(title)}"
         cached_song = cache.get(cache_key)
 
         if cached_song:
