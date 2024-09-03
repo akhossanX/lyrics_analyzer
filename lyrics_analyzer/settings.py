@@ -131,6 +131,7 @@ CACHES = {
     }
 }
 
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "DUMMY_KEY")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
