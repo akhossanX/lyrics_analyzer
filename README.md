@@ -110,7 +110,7 @@ Follow these steps to get the Song Lyrics Analyzer up and running on your local 
    Open your web browser and go to `http://localhost:8000`
 
 2. **Logging In**
-   - Click on the login link or go to `http://localhost:8000/admin`
+   - Click on the login link or go to `http://localhost:8000`
    - Enter the superuser credentials you created during setup
 
 3. **Analyzing Song Lyrics**
